@@ -2,7 +2,7 @@ version: "3.8"
 services:
   ratio-nginx:
     image: nginx:1.19-alpine
-    container_name: 'ratio-nginx-nginx'
+    container_name: 'ratio-nginx'
     volumes:
       - ./server:/var/www/server
       - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf
