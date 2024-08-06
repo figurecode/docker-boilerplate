@@ -1,0 +1,5 @@
+etc/mongo/data/db/
+etc/mongo/data/log/
+etc/nginx/logs/
+etc/rabbitmq/log/
+etc/rabbitmq/data/
