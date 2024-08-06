@@ -1,0 +1,67 @@
+name: {NAME_PROJECT}
+
+services:
+  mongodb:
+    container_name: {NAME_PROJECT}-mongo
+    image: mongo:4.4
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./etc/mongo/initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./etc/mongo/data/db/:/data/db/
+      - ./etc/mongo/data/log/:/var/log/mongodb/
+      - ./etc/mongo/backup/:/backup/
+    networks:
+      - {NETWORKS_NAME}
+
+  php-fpm:
+    container_name: {NAME_PROJECT}-php
+    build:
+      context: ./etc/php
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    ports:
+      - '9000:9000'
+    volumes:
+      - ../backend:/var/www/backend
+      - ./etc/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./etc/php/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini
+    depends_on:
+      - mongodb
+    networks:
+      - {NETWORKS_NAME}
+
+  rabbit:
+    container_name: {NAME_PROJECT}-rabbit
+    image: rabbitmq:3.13-management
+    environment:
+        RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+        RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - ./etc/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./etc/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - {NETWORKS_NAME}
+
+  nginx:
+    container_name: {NAME_PROJECT}-nginx
+    image: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - ../backend:/var/www/backend
+      - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./etc/nginx/logs:/var/log/nginx/
+    depends_on:
+      - php-fpm
+    networks:
+      - {NETWORKS_NAME}
+
+
+networks:
+  {NETWORKS_NAME}:
+    driver: bridge
