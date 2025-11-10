@@ -1,8 +1,8 @@
-name: '{project_name}'
+name: '{NAME_PROJECT}'
 
 services:
   go:
-    container_name: go-{project_name}
+    container_name: go-{NAME_PROJECT}
     build:
       context: ./
     volumes:
@@ -10,8 +10,8 @@ services:
     # ports:
     #  - '80:80'
     networks:
-      - go_{project_name}
+      - go_{NAME_PROJECT}
 
 networks:
-  go_{project_name}:
+  go_{NAME_PROJECT}:
     driver: bridge

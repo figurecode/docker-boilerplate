@@ -1,4 +1,4 @@
-# Пример сборки для локальной разработки под Symfony + MongoDB
+# Пример сборки для локальной разработки под Go
 
 Код монтируется в контейнер:
 
@@ -7,26 +7,10 @@
 
 ## Стек
 
-1. PHP 8.3
-2. [MongoDB 4.4](https://www.mongodb.com/docs/v4.4/) (используется эта версия, потому что в ней остался sh, начиная с
-   5-й версии нужен отдельный клиент)
-3. RabbitMQ 3.13-management
-4. Nginx
+1. Go 1.25
 
-Сборка используется для Symfony, поэтому в контейнере php-fpm предустановлен Symfony CLI.
 
 # <a name="start"></a> Подготовка к работе
 
-1. Копируются файлы сборки в директорию будущего проекта
-2. `cp docker/.env.example docker/.env`
-3. Заполнить необходимые параметры в `docker/.env`
-4. Указать `{NAME_PROJECT}` и `{NETWORKS_NAME}` в [docker-compose.yml](docker/docker-compose.yml)
-5. Прописать название DB, название пользователя и пароль в
-   инициализации [MongoDB](docker/etc/mongo/initdb.d/mongo-init.js)
-6. Настроить [параметры nginx](docker/etc/nginx/default.conf). 
-   Заменить заглушку у:
-   * `server` - тут надо указать название контейнера `php`  
-   * `server_name` - надо указать домен, по которому локально будет доступен проект
-7. Настроить `hosts`, указать выбранный локальный домен, который прописан в параметрах `nginx`
-8. Запустить сборку `make up`
-9. В идеале все запустилось, можно продолжать настройку Symfony в контейнере `php-fpm`. Для проверки: `symfony check:requirements` 
+1. Указать `{NAME_PROJECT}` [docker-compose.yml](docker/docker-compose.yml)
+2. Запустить сборку `make up`
